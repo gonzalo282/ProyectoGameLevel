@@ -29,7 +29,8 @@ fun HomeScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(inner)
+                .padding(inner),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Imagen superior (usa drawable/logo.png)
             Image(
@@ -44,21 +45,26 @@ fun HomeScreen() {
             Spacer(Modifier.height(16.dp))
 
             // Título y subtítulo
-            Column(Modifier.padding(horizontal = 16.dp)) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
                 Text(
                     text = "Game Level",
                     style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center
                 )
                 Text(
                     text = "Inicia sesión o regístrate para continuar",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center
                 )
             }
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(24.dp))
 
-            // Dos botones de inicio de sesión
+            // Botones de inicio de sesión
             Column(
                 Modifier
                     .fillMaxWidth()
@@ -87,13 +93,13 @@ fun HomeScreen() {
                 }
             }
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(24.dp))
 
             // Separador
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 40.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Divider(Modifier.weight(1f))
@@ -105,40 +111,39 @@ fun HomeScreen() {
                 Divider(Modifier.weight(1f))
             }
 
-            Spacer(Modifier.height(12.dp))
+            // Empuja los iconos hacia abajo
+            Spacer(modifier = Modifier.weight(1f))
 
-            // Tres botones redondos para registro
+            // Botones redondos de registro
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp, vertical = 32.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 ElevatedButton(
                     onClick = { /* TODO: Google */ },
                     shape = CircleShape,
-                    contentPadding = PaddingValues(14.dp)
+                    contentPadding = PaddingValues(20.dp)
                 ) {
                     Icon(Icons.Filled.Public, contentDescription = "Google")
                 }
                 ElevatedButton(
                     onClick = { /* TODO: Facebook */ },
                     shape = CircleShape,
-                    contentPadding = PaddingValues(14.dp)
+                    contentPadding = PaddingValues(20.dp)
                 ) {
                     Icon(Icons.Filled.AccountCircle, contentDescription = "Facebook")
                 }
                 ElevatedButton(
                     onClick = { /* TODO: Apple */ },
                     shape = CircleShape,
-                    contentPadding = PaddingValues(14.dp)
+                    contentPadding = PaddingValues(20.dp)
                 ) {
                     Icon(Icons.Filled.Android, contentDescription = "Apple")
                 }
             }
-
-            Spacer(Modifier.height(24.dp))
         }
     }
 }
