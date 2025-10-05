@@ -13,10 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.tunombre.gamelevel_.ui.theme.*
 
 // Acento turquesa para el monto grande
@@ -25,58 +27,52 @@ private val Aqua = Color(0xFF00D1B2)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountScreen(
+    navController: NavController, // <--- PARÁMETRO AÑADIDO
     // datos
     email: String = "ghon.cbr@gmail.com",
     nick: String  = "Game Level id:01",
 
     // callbacks
     onTopUp: () -> Unit = {},
-    onJoinNow: () -> Unit = {},         // <- usamos este para volver al login
     onLearnMore: () -> Unit = {},
-
-    // bottom bar
-    onGoMarketplace: () -> Unit = {},
-    onGoSearch: () -> Unit = {},
-    onGoCart: () -> Unit = {},
-    onGoAccount: () -> Unit = {},
 
     // acciones
     onConnectedApps: () -> Unit = {},
     onMfa: () -> Unit = {},
     onTickets: () -> Unit = {},
     onAppPreferences: () -> Unit = {},
-    onLogout: () -> Unit = {}
 ) {
 
     Scaffold(
         containerColor = PurpleBg,
         topBar = {
             TopAppBar(
-                title = { Text("My Cuenta", color = OnDark, fontWeight = FontWeight.SemiBold) },
+                title = { Text("Mi Cuenta", color = OnDark, fontWeight = FontWeight.SemiBold) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = PurpleAppBar)
             )
         },
         bottomBar = {
             NavigationBar(containerColor = PurpleAppBar) {
+                // CONECTAMOS LAS ACCIONES AL NAVCONTROLLER
                 NavigationBarItem(
-                    selected = false, onClick = onGoMarketplace,
+                    selected = false, onClick = { navController.navigate("catalog") },
                     icon = { Icon(Icons.Default.Store, null) }, label = { Text("Marketplace") },
-                    colors = NavigationBarItemDefaults.colors(selectedIconColor = OnDark, selectedTextColor = OnDark)
+                    colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent, unselectedIconColor = OnMuted, unselectedTextColor = OnMuted)
                 )
                 NavigationBarItem(
-                    selected = false, onClick = onGoSearch,
+                    selected = false, onClick = { /* navController.navigate("search") */ },
                     icon = { Icon(Icons.Default.Search, null) }, label = { Text("Search") },
-                    colors = NavigationBarItemDefaults.colors(selectedIconColor = OnDark, selectedTextColor = OnDark)
+                    colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent, unselectedIconColor = OnMuted, unselectedTextColor = OnMuted)
                 )
                 NavigationBarItem(
-                    selected = false, onClick = onGoCart,
+                    selected = false, onClick = { navController.navigate("cart") },
                     icon = { Icon(Icons.Default.ShoppingCart, null) }, label = { Text("Cart") },
-                    colors = NavigationBarItemDefaults.colors(selectedIconColor = OnDark, selectedTextColor = OnDark)
+                    colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent, unselectedIconColor = OnMuted, unselectedTextColor = OnMuted)
                 )
                 NavigationBarItem(
-                    selected = true, onClick = onGoAccount,
+                    selected = true, onClick = { /* Ya estamos aquí */ },
                     icon = { Icon(Icons.Default.AccountCircle, null) }, label = { Text("My account") },
-                    colors = NavigationBarItemDefaults.colors(selectedIconColor = OnDark, selectedTextColor = OnDark)
+                    colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent, selectedIconColor = OnDark, selectedTextColor = OnDark)
                 )
             }
         }
@@ -182,7 +178,7 @@ fun AccountScreen(
                     Text("Junta Puntos Game Level y Disfruta De Descuentos", color = OnMuted)
                     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         Button(
-                            onClick = onJoinNow,  // <- vuelve al login
+                            onClick = { navController.navigate("signin") },  // <- vuelve al login
                             colors = ButtonDefaults.buttonColors(containerColor = YellowAccent, contentColor = BgBlack),
                             shape = RoundedCornerShape(12.dp),
                         ) { Text("Join now", fontWeight = FontWeight.Bold) }
@@ -197,6 +193,7 @@ fun AccountScreen(
                 }
             }
 
+            // ... El resto del código para la lista de acciones y logout se mantiene igual ...
             // ---------- Lista de acciones ----------
             SectionTitle("Seguridad")
             ListItemRow("Connecta tus apps", Icons.Default.Link, onClick = onConnectedApps)
@@ -209,7 +206,12 @@ fun AccountScreen(
             // ---------- Logout ----------
             Spacer(Modifier.height(8.dp))
             TextButton(
-                onClick = onLogout,
+                onClick = {
+                    // Lógica para desloguear y volver a signin limpiando el historial
+                    navController.navigate("signin") {
+                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                    }
+                },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) { Text("Logout", color = YellowAccent, fontWeight = FontWeight.Bold) }
 
@@ -218,6 +220,7 @@ fun AccountScreen(
     }
 }
 
+// ... (El resto de tus Composables privados como SectionTitle y ListItemRow se mantienen igual)
 @Composable
 private fun SectionTitle(text: String) {
     Text(text, color = OnMuted, modifier = Modifier.padding(top = 8.dp))
@@ -226,7 +229,7 @@ private fun SectionTitle(text: String) {
 @Composable
 private fun ListItemRow(
     title: String,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     onClick: () -> Unit
 ) {
     Surface(
@@ -248,8 +251,11 @@ private fun ListItemRow(
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 private fun AccountPreview() {
-    GameLevel_Theme { AccountScreen() }
+    // Para que el preview funcione, creamos un NavController falso.
+    val navController = NavController(androidx.compose.ui.platform.LocalContext.current)
+    GameLevel_Theme { AccountScreen(navController = navController) }
 }

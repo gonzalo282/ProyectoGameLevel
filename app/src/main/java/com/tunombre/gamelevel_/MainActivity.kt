@@ -5,12 +5,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.tunombre.gamelevel_.feature_account.AccountScreen
 import com.tunombre.gamelevel_.feature_auth.SignInScreen
-import com.tunombre.gamelevel_.feature_home.HomeScreen
+import com.tunombre.gamelevel_.feature_cart.CartScreen
+import com.tunombre.gamelevel_.feature_catalog.CatalogScreen
+import com.tunombre.gamelevel_.ui.composables.AppBottomBar
 import com.tunombre.gamelevel_.ui.theme.GameLevel_Theme
 
 class MainActivity : ComponentActivity() {
@@ -40,38 +43,35 @@ fun AppNavigation() {
                 onBack = { /* navController.popBackStack() si quieres */ },
                 onCreateAccount = { /* TODO: ir a registro */ },
 
-                // Por ahora todas las acciones llevan a Home
-                onGoogle = { navController.navigate("home") },
-                onFacebook = { navController.navigate("home") },
-                onSteam = { navController.navigate("home") },
-                onDiscord = { navController.navigate("home") },
-                onTwitch = { navController.
-                navigate("home") },
-                onTwitter = { navController.navigate("home") },
+                // Ahora todas las acciones llevan a la pantalla de Catálogo
+                onGoogle = { navController.navigate("catalog") },
+                onFacebook = { navController.navigate("catalog") },
+                onSteam = { navController.navigate("catalog") },
+                onDiscord = { navController.navigate("catalog") },
+                onTwitch = { navController.navigate("catalog") },
+                onTwitter = { navController.navigate("catalog") },
 
-                onLoginWithPassword = { _ -> navController.navigate("home") },
-                onMagicLink = { _ -> navController.navigate("home") }
+                onLoginWithPassword = { _ -> navController.navigate("catalog") },
+                onMagicLink = { _ -> navController.navigate("catalog") }
             )
         }
 
-        // Pantalla Home
-        composable("home") {
-            AccountScreen()
-        }
-
-        composable("home") {
-            AccountScreen()
-        }
-        // Pantalla Home
-        composable("home") {
+        // Pantalla de Cuenta
+        composable("account") {
             AccountScreen(
-                onJoinNow = { navController.navigate("signin") }
+                // Pasamos el navController para que pueda navegar
+                navController = navController
             )
         }
 
+        // Pantalla del Catálogo
+        composable("catalog") {
+            CatalogScreen(navController = navController)
+        }
 
+        // Pantalla del Carrito
+        composable("cart") {
+            CartScreen(navController = navController)
+        }
     }
-
-
-
 }
