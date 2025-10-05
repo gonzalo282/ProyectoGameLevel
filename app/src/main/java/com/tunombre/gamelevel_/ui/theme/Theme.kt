@@ -1,10 +1,15 @@
 package com.tunombre.gamelevel_.ui.theme
 
+import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
 /**
  * Paleta unificada estilo “mock morado” para claro y oscuro.
@@ -39,6 +44,21 @@ fun GameLevel_Theme(
 ) {
     // Si quieres que SIEMPRE sea el mock morado, usa AppLightColors.
     val colors = if (darkTheme) AppDarkColors else AppLightColors
+
+    // ===== CÓDIGO NUEVO AÑADIDO PARA LA BARRA DE ESTADO =====
+    // SideEffect se usa para ejecutar código que afecta a elementos fuera de Compose (como la ventana de Android).
+    val view = LocalView.current
+    if (!view.isInEditMode) { // Nos aseguramos de que este código no se ejecute en la vista previa de Compose.
+        SideEffect {
+            // Obtenemos la ventana actual de la actividad.
+            val window = (view.context as Activity).window
+            // Establecemos el color de la barra de estado para que coincida con el fondo de nuestra app.
+            window.statusBarColor = colors.background.toArgb()
+            // Le decimos al sistema si los íconos de la barra de estado deben ser claros u oscuros.
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+        }
+    }
+    // ===== FIN DEL CÓDIGO AÑADIDO =====
 
     MaterialTheme(
         colorScheme = colors,

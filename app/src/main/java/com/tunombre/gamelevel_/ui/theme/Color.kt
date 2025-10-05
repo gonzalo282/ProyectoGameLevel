@@ -19,3 +19,4 @@ val BgBlack = Color(0xFF101010) // Texto oscuro sobre el botón amarillo
 
 // Bordes/separadores sutiles
 val BorderSoft = Color(0x33FFFFFF) // Blanco 20% para bordes y dividers
+

@@ -45,7 +45,8 @@ fun AppNavigation() {
                 onFacebook = { navController.navigate("home") },
                 onSteam = { navController.navigate("home") },
                 onDiscord = { navController.navigate("home") },
-                onTwitch = { navController.navigate("home") },
+                onTwitch = { navController.
+                navigate("home") },
                 onTwitter = { navController.navigate("home") },
 
                 onLoginWithPassword = { _ -> navController.navigate("home") },
